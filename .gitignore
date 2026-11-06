@@ -1,0 +1,19 @@
+# Local only: raw screenshots, notes, real values
+_working/
+
+# Secrets and keys
+*.env
+!app/deploy/gym-app.env.example
+*.pem
+*.key
+.aws/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Editors and OS
+.vscode/
+.obsidian/
+.DS_Store

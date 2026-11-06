@@ -1,0 +1,15 @@
+# /etc/systemd/system/gym-app.service
+[Unit]
+Description=Northside Gym demo (Flask + gunicorn)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/opt/gym-app
+EnvironmentFile=/etc/gym-app.env
+ExecStart=/opt/gym-app/venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 app:app
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

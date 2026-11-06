@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Log in · Northside Gym{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Member login</h1>
+  <form method="post">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" required>
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required>
+
+    <button class="btn">Log in</button>
+    <p class="demo">Demo only: use a test account, never a real password.</p>
+  </form>
+  <p>New here? <a href="{{ url_for('register') }}">Join the gym</a></p>
+</div>
+{% endblock %}

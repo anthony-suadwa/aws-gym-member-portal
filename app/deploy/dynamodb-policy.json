@@ -1,0 +1,11 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "GymCheckinsOnly",
+      "Effect": "Allow",
+      "Action": ["dynamodb:PutItem", "dynamodb:Query"],
+      "Resource": "arn:aws:dynamodb:eu-west-2:YOUR-12-DIGIT-ACCOUNT-ID:table/gym-checkins"
+    }
+  ]
+}

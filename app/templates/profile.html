@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}My profile · Northside Gym{% endblock %}
+{% block content %}
+<h1>Welcome back, {{ member.full_name.split()[0] }}</h1>
+
+<div class="card">
+  <h2>My membership <span class="muted">(from RDS)</span></h2>
+  <dl>
+    <dt>Name</dt><dd>{{ member.full_name }}</dd>
+    <dt>Email</dt><dd>{{ member.email }}</dd>
+    <dt>Plan</dt><dd>{{ member.plan_name }} · £{{ member.monthly_price }} a month</dd>
+    <dt>Includes</dt><dd>{{ member.perks }}</dd>
+    <dt>Member since</dt><dd>{{ member.joined_on.strftime('%d %b %Y') }}</dd>
+    <dt>Renews on</dt><dd>{{ member.renews_on.strftime('%d %b %Y') }} ({{ days_left }} days)</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <h2>My visits <span class="muted">(from DynamoDB)</span></h2>
+  {% if visits is none %}
+    <p class="muted">Check-ins are switched on in phase 2, once the DynamoDB table exists.</p>
+  {% else %}
+  <form method="post" action="{{ url_for('checkin') }}">
+    <button class="btn" style="margin-top:0">Check in now</button>
+  </form>
+  {% if visits %}
+    <table style="margin-top:16px">
+      <tr><th>Checked in (UTC)</th><th>Recorded by</th></tr>
+      {% for v in visits %}
+        <tr><td>{{ v.checked_in_at.replace('T', ' ')[:16] }}</td><td class="muted">{{ v.server }}</td></tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="muted">No visits yet. Press Check in to record one.</p>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

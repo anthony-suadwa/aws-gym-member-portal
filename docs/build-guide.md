@@ -212,17 +212,19 @@ Open a Session Manager shell on `gym-web-a`, then:
 
   *Why:* The schema creates the tables and their rules: each email must be unique, and every member must point at a real plan (a foreign key). It also adds three sample plans and the `gym_app` user. It needs the admin account because creating tables and users is an admin job. It runs once because both servers share one database, and `IF NOT EXISTS` makes it safe to run again. `sslmode=require` encrypts the connection between the server and RDS.
 
-- [ ] **5.4 Set the app user's password**, without it ever touching a file:
+- [x] **5.4 Set the app user's password**, without it ever touching a file:
 
   ```bash
   psql "host=<rds-endpoint> dbname=gym user=dbadmin sslmode=require"
   ```
 
-  At the `gym=>` prompt, type `\password gym_app`, enter a new password twice (save it in your password manager), then `\q`.
+  Log in with the `dbadmin` password from the console. At the `gym=>` prompt, type `\password gym_app`, enter a **new, different** password twice (save it in your password manager), then `\q`.
+
+  This is a second password. The console password belongs to `dbadmin`; `gym_app` was only just created by the schema, with no password.
 
   *Why:* `gym_app` is the **least-privilege** account the app logs in with. It can read plans and read or add members, nothing more. Setting the password with `\password` keeps it out of `schema.sql`, Git and your shell history.
 
-- [ ] **5.5 Settings.** Generate a secret key and copy it into your build log; you'll reuse it on `gym-web-b`:
+- [x] **5.5 Settings.** Generate a secret key and copy it into your build log; you'll reuse it on `gym-web-b`:
 
   ```bash
   python3 -c "import secrets; print(secrets.token_hex(32))"
@@ -236,7 +238,7 @@ Open a Session Manager shell on `gym-web-a`, then:
   - **`SECRET_KEY`:** after login, Flask stores who you are in a cookie in your browser, signed with this key so nobody can forge it. Both servers need the same key so a cookie made by one is trusted by the other.
   - **Empty `CHECKINS_TABLE`:** switches the DynamoDB feature off until part C.
 
-- [ ] **5.6 Start it:**
+- [x] **5.6 Start it:**
 
   ```bash
   sudo systemctl restart gym-app

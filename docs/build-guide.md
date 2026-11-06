@@ -144,7 +144,7 @@ The NAT Gateway, load balancer and public IPv4 addresses cost about $0.13 an hou
 
 ### Step 4. Database
 
-- [ ] **4.1 DB subnet group.** RDS → Subnet groups → Create DB subnet group:
+- [x] **4.1 DB subnet group.** RDS → Subnet groups → Create DB subnet group:
   - name `gym-db-subnets`, VPC `gym-vpc`
   - Availability Zones `eu-west-2a` and `eu-west-2b`
   - subnets `gym-db-a` (`10.20.21.0/24`) and `gym-db-b` (`10.20.22.0/24`) only
@@ -153,7 +153,7 @@ The NAT Gateway, load balancer and public IPv4 addresses cost about $0.13 an hou
 
   *Why:* A subnet group is the list of subnets RDS is allowed to place the database in. AWS insists on at least two Availability Zones, so it can move the database to the other zone (for Multi-AZ, or during recovery) without you changing any settings. Only the database subnets go in, which keeps the database in its own tier with no route to the internet.
 
-- [ ] **4.2 Create the database.** RDS → Create database → Standard create:
+- [x] **4.2 Create the database.** RDS → Create database → Standard create:
   - PostgreSQL, **Free tier** template, `db.t4g.micro`, 20 GiB
   - identifier `gym-db`, master username `dbadmin`, self-managed password (keep it in your password manager)
   - VPC `gym-vpc`, subnet group `gym-db-subnets`, public access **No**, security group `gym-db-sg` (remove default)
@@ -168,7 +168,7 @@ The NAT Gateway, load balancer and public IPv4 addresses cost about $0.13 an hou
   - **Encryption:** encrypts the storage and backups at rest with an AWS-managed key, at no extra cost.
   - **Backups 1 day:** keeps automated backups so you can restore to any point in the last day. One day keeps storage small.
 
-- [ ] **4.3** Wait for **Available** (about 10 minutes), then copy the endpoint into your build log.
+- [x] **4.3** Wait for **Available** (about 10 minutes), then copy the endpoint into your build log.
 
   *Why:* The endpoint is a DNS name, such as `gym-db.xxxx.eu-west-2.rds.amazonaws.com`, not an IP address. RDS can change the IP behind it (after a restart or failover), and the name always points to the right place. That's why the app connects by name.
 
@@ -181,7 +181,7 @@ The NAT Gateway, load balancer and public IPv4 addresses cost about $0.13 an hou
 
 Open a Session Manager shell on `gym-web-a`, then:
 
-- [ ] **5.1 Get the code:**
+- [x] **5.1 Get the code:**
 
   ```bash
   sudo git clone https://github.com/<your-username>/aws-gym-member-portal.git /opt/aws-gym-member-portal
@@ -192,7 +192,7 @@ Open a Session Manager shell on `gym-web-a`, then:
 
   *Why:* Both servers pull the same code from GitHub, so they always run the same version. `/opt` is the usual Linux folder for add-on software. It belongs to root, hence `sudo`.
 
-- [ ] **5.2 Install the app.** This copies the app to `/opt/gym-app`, sets up Python and the service, and points Apache at it:
+- [x] **5.2 Install the app.** This copies the app to `/opt/gym-app`, sets up Python and the service, and points Apache at it:
 
   ```bash
   sudo bash scripts/install-app.sh
@@ -204,7 +204,7 @@ Open a Session Manager shell on `gym-web-a`, then:
   - **systemd service:** starts the app at boot and restarts it if it crashes, like any other Linux service.
   - **Apache as a reverse proxy:** Apache keeps listening on port 80 and passes requests to gunicorn on `127.0.0.1:8000`. gunicorn is never exposed to the network, and the ALB and security groups stay on port 80.
 
-- [ ] **5.3 Load the schema** as the master user:
+- [x] **5.3 Load the schema** as the master user:
 
   ```bash
   psql "host=<rds-endpoint> dbname=gym user=dbadmin sslmode=require" -f app/schema.sql

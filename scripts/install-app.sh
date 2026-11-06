@@ -30,7 +30,9 @@ echo "==> Installing the systemd service and Apache proxy"
 cp "$APP_DIR/deploy/gym-app.service" /etc/systemd/system/gym-app.service
 cp "$APP_DIR/deploy/gym-proxy.conf" /etc/httpd/conf.d/gym-proxy.conf
 systemctl daemon-reload
-systemctl enable --now httpd
+systemctl enable httpd
+# restart (not just start) so Apache loads gym-proxy.conf even if it was already running
+systemctl restart httpd
 systemctl enable gym-app
 
 if [[ ! -f "$ENV_FILE" ]]; then
